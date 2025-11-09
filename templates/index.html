@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>QuizGen</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <div class="glass">
+    <h1>QuizGen</h1>
+    {% if not current_user.is_authenticated %}
+      <a href="{{ url_for('google.login') }}"><button>Sign in with Google</button></a>
+    {% else %}
+      <p>Welcome, {{ current_user.name }} ({{ current_user.tokens }} tokens)</p>
+      <form method="post" enctype="multipart/form-data" action="/generate">
+        <textarea name="notes" rows="6" cols="50" placeholder="Paste your study notes here..."></textarea><br>
+        <label>Number of Questions: <input type="number" name="num_questions" min="1" max="20" value="10"></label><br>
+        <button type="submit">Generate Quiz</button>
+      </form>
+      <p><a href="{{ url_for('logout') }}">Logout</a></p>
+      {% if quiz %}
+        <h3>{{ quiz.title }}</h3>
+        <pre>{{ quiz.content }}</pre>
+      {% endif %}
+    {% endif %}
+  </div>
+</body>
+</html>
